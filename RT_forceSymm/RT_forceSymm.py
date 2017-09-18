@@ -38,7 +38,7 @@ delimiter = ''
 filepath = delimiter.join(mylist)
 h5new = h5py.File(filepath,'w')
 
-istep='001000'
+istep='038000'
 #read dataset dimensions
 mylist = ['Fields/','Prho','/',istep]
 filepath = delimiter.join(mylist)
@@ -49,7 +49,15 @@ ny=m1.shape[1]
 nx=m1.shape[2]
 dz=3.2/nz
 
+#Vx=0 
+delimiter = ''
+mylist = ['Fields/',variable[0],'/',istep]
+filepath = delimiter.join(mylist)
 
+m1=np.zeros((nz, ny, nx))
+h5new.create_dataset(filepath,data=m1)
+#
+#
  
 #Vy antisymmetric
 delimiter = ''
