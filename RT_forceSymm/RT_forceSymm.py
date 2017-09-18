@@ -71,12 +71,12 @@ filepath = delimiter.join(mylist)
 databk = h5file.get(filepath)
 m1 = np.array(databk)
 
-
-m2=np.zeros((2*nz, ny, nx))
-m2[nz/2:3*nz/2, :, :]=m1[0:nz, :, :]
-h5new.create_dataset(filepath,data=m2)
-
-#rho
+m2=np.zeros((nz, ny/2, nx))
+m2=(m1[:,0:ny/2,:]+m1[:,ny-1:ny/2-1:-1,:])/2
+m1[:,0:ny/2,:]=m2
+m1[:,ny-1:ny/2-1:-1,:]=m2
+h5new.create_dataset(filepath,data=m1)
+##rho
 delimiter = ''
 mylist = ['Fields/',variable[4],'/',istep]
 filepath = delimiter.join(mylist)
@@ -106,19 +106,14 @@ mylist = ['Fields/',variable[3],'/',istep]
 filepath = delimiter.join(mylist)
 databk = h5file.get(filepath)
 m1 = np.array(databk)
-m2=np.zeros((2*nz, ny, nx))
-#also calcualte 40 grid points away
-#largest mean pressure at lowest point  
-pressLarge=np.mean(m1[0+40,:,:])
-#smallest mean pressure at highest point
-pressSmall=np.mean(m1[nz-1-40,:,:])
-m2[nz/2:3*nz/2, :, :]=m1[0:nz, :, :]
 
-for i in range(nz/2+40):
-  m2[i]=pressLarge+rhoL*g*dz*(nz/2+40-i)
-  m2[2*nz-i-1]=pressSmall-rhoH*g*dz*(nz/2+40-i)
-h5new.create_dataset(filepath,data=m2)
+m2=np.zeros((nz, ny/2, nx))
+m2=(m1[:,0:ny/2,:]+m1[:,ny-1:ny/2-1:-1,:])/2
+m1[:,0:ny/2,:]=m2
+m1[:,ny-1:ny/2-1:-1,:]=m2
+h5new.create_dataset(filepath,data=m1)
 #
+
 #
 #
 #
